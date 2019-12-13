@@ -53,7 +53,9 @@ Connection::Connection(_In_ winrt::Windows::Networking::Sockets::StreamSocket co
 
     slim_lock_guard guard(m_lock);
 
-    m_streamSocket = socket;
+	//m_streamSocket = socket;
+    m_streamSocket = static_cast<IAbstractStreamSocket>(CustomStreamSocket(socket));
+    //m_streamSocket = make<CustomStreamSocket>(socket);
 
     ZeroMemory(&m_receivedHeader, sizeof(PayloadHeader));
     m_receivedHeader.ePayloadType = PayloadType::Unknown;
@@ -395,4 +397,34 @@ void Connection::CloseOnDisconnectedSocketError(HRESULT hResult)
     }
 }
 
+
+///////////////////////////////////////
+///
+///CustomStreamSocket
+///
+
+CustomStreamSocket::CustomStreamSocket(StreamSocket const socket)
+{
+	m_streamSocket = socket;
+}
+
+void CustomStreamSocket::Close()
+{
+	m_streamSocket.Close();
+}
+
+StreamSocketInformation CustomStreamSocket::Information()
+{
+	return m_streamSocket.Information();
+}
+
+IInputStream CustomStreamSocket::InputStream()
+{
+	return m_streamSocket.InputStream();
+}
+
+IOutputStream CustomStreamSocket::OutputStream()
+{
+	return m_streamSocket.OutputStream();
+}
 

@@ -7,6 +7,24 @@
 
 namespace winrt::RealtimeStreaming::Network::implementation
 {
+	struct CustomStreamSocket : IAbstractStreamSocket
+	{
+	public:
+		CustomStreamSocket() = default;
+		CustomStreamSocket(_In_ Windows::Networking::Sockets::StreamSocket const socket);
+
+		//IAbstractStreamSocket
+		void Close();
+		Windows::Networking::Sockets::StreamSocketInformation Information();
+
+		Windows::Storage::Streams::IInputStream InputStream();
+		Windows::Storage::Streams::IOutputStream OutputStream();
+		
+	private:
+		Windows::Networking::Sockets::StreamSocket m_streamSocket{ nullptr };
+	};
+
+	
     struct Connection : ConnectionT<Connection>
     {
     public:
@@ -61,7 +79,8 @@ namespace winrt::RealtimeStreaming::Network::implementation
 
         void CloseOnDisconnectedSocketError(HRESULT hResult);
 
-        Windows::Networking::Sockets::StreamSocket    m_streamSocket{ nullptr };
+        //Windows::Networking::Sockets::StreamSocket    m_streamSocket{ nullptr };
+        IAbstractStreamSocket m_streamSocket{nullptr};
         Common::PayloadHeader m_receivedHeader;
         winrt::event<RealtimeStreaming::Network::DisconnectedDelegate> m_evtDisconnected;
         winrt::event<Windows::Foundation::EventHandler<RealtimeStreaming::Network::DataBundleArgs>> m_evtBundleReceived;
