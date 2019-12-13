@@ -54,7 +54,7 @@ Connection::Connection(_In_ winrt::Windows::Networking::Sockets::StreamSocket co
     slim_lock_guard guard(m_lock);
 
 	//m_streamSocket = socket;
-    m_streamSocket = static_cast<IAbstractStreamSocket>(CustomStreamSocket(socket));
+    m_streamSocket = static_cast<winrt::RealtimeStreaming::Network::IAbstractStreamSocket>(CustomStreamSocket(socket));
     //m_streamSocket = make<CustomStreamSocket>(socket);
 
     ZeroMemory(&m_receivedHeader, sizeof(PayloadHeader));
@@ -62,6 +62,25 @@ Connection::Connection(_In_ winrt::Windows::Networking::Sockets::StreamSocket co
 
     // Create background task
     RunSocketLoop();
+}
+
+Connection::Connection(_In_ winrt::RealtimeStreaming::Network::IAbstractStreamSocket socket, bool unused)
+	: m_concurrentFailedBuffers(0)
+	, m_concurrentFailedBundles(0)
+{
+	Log(Log_Level_Info, L"Connection::Connection - Tid: %d \n", GetCurrentThreadId());
+
+	slim_lock_guard guard(m_lock);
+
+	m_streamSocket = socket;
+	//m_streamSocket = static_cast<IAbstractStreamSocket>(CustomStreamSocket(socket));
+	////m_streamSocket = make<CustomStreamSocket>(socket);
+
+	ZeroMemory(&m_receivedHeader, sizeof(PayloadHeader));
+	m_receivedHeader.ePayloadType = PayloadType::Unknown;
+
+	// Create background task
+	RunSocketLoop();
 }
 
 _Use_decl_annotations_

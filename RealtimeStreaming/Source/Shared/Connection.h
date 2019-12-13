@@ -34,6 +34,7 @@ namespace winrt::RealtimeStreaming::Network::implementation
 
         Connection() = default;
         Connection(_In_ Windows::Networking::Sockets::StreamSocket const socket);
+        Connection(_In_ IAbstractStreamSocket socket, bool unused = true);
         ~Connection();
 
         // IClosable

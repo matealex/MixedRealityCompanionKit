@@ -7,6 +7,17 @@ import "DataBundleArgs.idl";
 
 namespace RealtimeStreaming.Network
 {
+	[uuid(0d585932-fbc4-4b0a-90b5-ccf34aefd4c6)]
+	[version(1.0)]
+	interface IAbstractStreamSocket : IInspectable
+	{
+		void Close();
+		Windows.Networking.Sockets.StreamSocketInformation Information();
+
+		Windows.Storage.Streams.IInputStream InputStream();
+		Windows.Storage.Streams.IOutputStream OutputStream();
+	};
+
     delegate void DisconnectedDelegate();
 
     [marshaling_behavior(agile)]
@@ -16,6 +27,7 @@ namespace RealtimeStreaming.Network
     runtimeclass Connection
     {
         Connection(Windows.Networking.Sockets.StreamSocket streamSocket);
+		Connection(IAbstractStreamSocket abstractStreamSocket, Boolean unused);
 
         Windows.Foundation.IAsyncAction SendPayloadTypeAsync(RealtimeStreaming.Common.PayloadType type);
         Windows.Foundation.IAsyncAction SendBundleAsync(DataBundle dataBundle);
@@ -28,15 +40,4 @@ namespace RealtimeStreaming.Network
         event DisconnectedDelegate Disconnected;
         event Windows.Foundation.EventHandler<DataBundleArgs > Received;
     };
-
-	[uuid(0d585932-fbc4-4b0a-90b5-ccf34aefd4c6)]
-	[version(1.0)]
-	interface IAbstractStreamSocket : IInspectable
-	{
-		void Close();
-		Windows.Networking.Sockets.StreamSocketInformation Information();
-
-		Windows.Storage.Streams.IInputStream InputStream();
-		Windows.Storage.Streams.IOutputStream OutputStream();
-	};
 }
