@@ -53,9 +53,7 @@ Connection::Connection(_In_ winrt::Windows::Networking::Sockets::StreamSocket co
 
     slim_lock_guard guard(m_lock);
 
-	//m_streamSocket = socket;
-    m_streamSocket = static_cast<winrt::RealtimeStreaming::Network::IAbstractStreamSocket>(CustomStreamSocket(socket));
-    //m_streamSocket = make<CustomStreamSocket>(socket);
+	m_streamSocket = make<CustomStreamSocket>(socket);
 
     ZeroMemory(&m_receivedHeader, sizeof(PayloadHeader));
     m_receivedHeader.ePayloadType = PayloadType::Unknown;
@@ -73,8 +71,6 @@ Connection::Connection(_In_ winrt::RealtimeStreaming::Network::IAbstractStreamSo
 	slim_lock_guard guard(m_lock);
 
 	m_streamSocket = socket;
-	//m_streamSocket = static_cast<IAbstractStreamSocket>(CustomStreamSocket(socket));
-	////m_streamSocket = make<CustomStreamSocket>(socket);
 
 	ZeroMemory(&m_receivedHeader, sizeof(PayloadHeader));
 	m_receivedHeader.ePayloadType = PayloadType::Unknown;
@@ -243,8 +239,10 @@ IAsyncAction Connection::SendBundleAsync(
     Log(Log_Level_Info, L"Connection::SendBundleAsync() - Tid: %d \n", GetCurrentThreadId());
 
     // If socket is closed, we cannot send anything
-    if (FAILED(CheckClosed())) return;
-
+	if (FAILED(CheckClosed())) {
+		Log(Log_Level_Info, L"Connection::SendBundleAsync() FAILED \n");
+		return;
+	}
     try
     {
         UINT32 totalLength = 0, bufferCount = 0;
@@ -425,25 +423,34 @@ void Connection::CloseOnDisconnectedSocketError(HRESULT hResult)
 CustomStreamSocket::CustomStreamSocket(StreamSocket const socket)
 {
 	m_streamSocket = socket;
+	Log(Log_Level_Info, L"CustomStreamSocket::CustomStreamSocket()\n");
+}
+
+winrt::RealtimeStreaming::Network::implementation::CustomStreamSocket::~CustomStreamSocket()
+{
 }
 
 void CustomStreamSocket::Close()
 {
 	m_streamSocket.Close();
+	Log(Log_Level_Info, L"CustomStreamSocket::Close()\n");
 }
 
 StreamSocketInformation CustomStreamSocket::Information()
 {
+	Log(Log_Level_Info, L"CustomStreamSocket::Information()\n");
 	return m_streamSocket.Information();
 }
 
 IInputStream CustomStreamSocket::InputStream()
 {
+	Log(Log_Level_Info, L"CustomStreamSocket::InputStream()\n");
 	return m_streamSocket.InputStream();
 }
 
 IOutputStream CustomStreamSocket::OutputStream()
 {
+	Log(Log_Level_Info, L"CustomStreamSocket::OutputStream()\n");
 	return m_streamSocket.OutputStream();
 }
 
