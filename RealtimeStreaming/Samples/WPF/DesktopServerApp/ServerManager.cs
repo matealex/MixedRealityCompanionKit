@@ -286,7 +286,7 @@ namespace DesktopServerApp
         private void InitServer()
         {
             // Use H.265 with raw RGB32 texture inputs
-            var profile = MediaEncodingProfile.CreateHevc(VideoEncodingQuality.HD720p);
+            var profile = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.HD720p);
 
             profile.Video.Width = width;
             profile.Video.Height = height;
