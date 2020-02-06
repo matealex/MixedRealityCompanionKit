@@ -47,8 +47,8 @@ public class PlayerControl : MonoBehaviour
 
     public void ConnectPlayer()
     {
-        rtPlayer.RemoteAddress = this.IPAddressInput.Value;
-        rtPlayer.Port = Convert.ToUInt16(this.PortInput.Value);
+        rtPlayer.RemoteAddress = "localhost";//this.IPAddressInput.Value;
+        //rtPlayer.Port = Convert.ToUInt16(this.PortInput.Value);
         rtPlayer.ConnectPlayer(false);
     }
 

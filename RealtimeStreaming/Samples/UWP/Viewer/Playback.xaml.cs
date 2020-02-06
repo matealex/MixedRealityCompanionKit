@@ -34,7 +34,7 @@ namespace Viewer
                     this.txAddress.Text = this.txAddress.PlaceholderText;
                 }
                 Windows.Networking.HostName host = new Windows.Networking.HostName(this.txAddress.Text);
-                this.connector = new Connector();
+                this.connector = new Connector(true);
 
                 if (this.connector != null)
                 {

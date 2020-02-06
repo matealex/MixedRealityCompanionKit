@@ -62,14 +62,22 @@ IAsyncOperation<VideoEncodingProperties> RealtimeMediaPlayer::InitAsync(
 {
     IFT(CreateMediaPlayer());
 
+	Log(Log_Level_Info, L"RealtimeMediaPlayer::InitAsync() - Created Media Player\n");
+	
     m_RealtimeMediaSource = winrt::make<Media::implementation::RealtimeMediaSource>();
 
+	Log(Log_Level_Info, L"RealtimeMediaPlayer::InitAsync() - Created Media Source\n");
+	
     co_await m_RealtimeMediaSource.InitAsync(connection);
+
+	Log(Log_Level_Info, L"RealtimeMediaPlayer::InitAsync() - Init Async\n");
 
     MediaStreamSource mediaStreamSource = m_RealtimeMediaSource.MediaStreamSource();
     MediaSource source = MediaSource::CreateFromMediaStreamSource(mediaStreamSource);
     m_mediaPlayer.Source(source);
 
+	Log(Log_Level_Info, L"RealtimeMediaPlayer::InitAsync() - Created Media Player\n");
+	
     // TODO: Turn this into MediaEncodingProfile when supporting audio
     return m_RealtimeMediaSource.VideoProperties();
 }
