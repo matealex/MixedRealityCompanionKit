@@ -7,6 +7,17 @@
       name="RealtimeStreaming.Network.Listener"
       threadingModel="both"
       xmlns="urn:schemas-microsoft-com:winrt.v1" />
+
+    <activatableClass
+      name="RealtimeStreaming.Network.Connector"
+      threadingModel="both"
+      xmlns="urn:schemas-microsoft-com:winrt.v1" />
+
+    <activatableClass
+      name="RealtimeStreaming.Media.RealtimeServer"
+      threadingModel="both"
+      xmlns="urn:schemas-microsoft-com:winrt.v1" />
+
   </file>
 
 </assembly>

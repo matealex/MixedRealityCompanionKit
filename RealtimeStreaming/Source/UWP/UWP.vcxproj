@@ -84,6 +84,12 @@
     <IntDir>$(SolutionDir)Temp\$(Configuration)\$(ProjectName)\$(PlatformShortName)\</IntDir>
     <TargetName>$(SolutionName)</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)\GeneratedFiles\winrt;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)\GeneratedFiles\winrt;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
